@@ -7,10 +7,10 @@ servers:
     variables:
       host:
         enum:
-          - localhost:8080
-          - localhost:9000
-          - masadamsahid-golang-gin-book-api.apn.leapcell.app/
-        default: masadamsahid-golang-gin-book-api.apn.leapcell.app
+          - https://masadamsahid-golang-gin-book-api.apn.leapcell.app
+          - http://localhost:8080
+          - http://localhost:9000
+        default: https://masadamsahid-golang-gin-book-api.apn.leapcell.app
 tags:
   - name: HealthCheck
     description: APIs for checking the health of the service
