@@ -7,6 +7,7 @@ import (
 	"quiz3/database/db"
 	"quiz3/helpers"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -86,9 +87,19 @@ RETURNING id, title, description, image_url, release_year, price, total_page, th
 		&newBook.ModifiedBy,
 	)
 	if err != nil {
+		status := http.StatusInternalServerError
+		msg := "Failed creating book"
+
+		if strings.Contains(err.Error(), "violates foreign key constraint \"fk_books_category\"") {
+			ctx.JSON(http.StatusConflict, gin.H{
+				"message": "Category ID not found",
+			})
+			return
+		}
+
 		log.Println(err)
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Failed creating new book",
+		ctx.JSON(status, gin.H{
+			"message": msg,
 		})
 		return
 	}
@@ -282,7 +293,12 @@ RETURNING id, title, description, image_url, release_year, price, total_page, th
 		status := http.StatusInternalServerError
 		msg := "Failed updating book"
 
-		if err.Error() == sql.ErrNoRows.Error() {
+		if strings.Contains(err.Error(), "violates foreign key constraint \"fk_books_category\"") {
+			ctx.JSON(http.StatusConflict, gin.H{
+				"message": "Category ID not found",
+			})
+			return
+		} else if err.Error() == sql.ErrNoRows.Error() {
 			status = http.StatusNotFound
 			msg = "Book not found"
 		}
