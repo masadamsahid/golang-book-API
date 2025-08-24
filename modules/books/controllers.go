@@ -50,7 +50,7 @@ func HandleCreateBook(ctx *gin.Context) {
 	}
 
 	var newBook Book
-	sqlCreteNewCategory := `INSERT INTO
+	sqlCreteNewBook := `INSERT INTO
 books (title, description, image_url, release_year, price, total_page, thickness, category_id, created_by)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 RETURNING id, title, description, image_url, release_year, price, total_page, thickness, category_id, created_at, created_by, modified_at, modified_by
@@ -60,7 +60,7 @@ RETURNING id, title, description, image_url, release_year, price, total_page, th
 		thickness = "tebal"
 	}
 
-	err = db.DBconn.QueryRow(sqlCreteNewCategory,
+	err = db.DBconn.QueryRow(sqlCreteNewBook,
 		createBookDto.Title,
 		createBookDto.Description,
 		createBookDto.ImageURL,

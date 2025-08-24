@@ -128,6 +128,9 @@ Updates an existing category's name.
 
 Deletes a category by its ID.
 
+#### `GET /api/categories/:id/books`
+Retrieves all books belonging to a specific category.
+
 ---
 
 ### Books

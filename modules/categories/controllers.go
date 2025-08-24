@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"quiz3/database/db"
 	"quiz3/helpers"
+	"quiz3/modules/books"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -268,5 +269,92 @@ func HandleDeleteCategoryByID(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "Success deleting category",
+	})
+}
+
+func HandleGetAllBooksFromCategoryByID(ctx *gin.Context) {
+	strId := ctx.Param("id")
+	id, err := strconv.Atoi(strId)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "Invalid category ID",
+		})
+		return
+	}
+
+	sqlGetAllBooksFromCategory := `
+SELECT
+	b.id,
+	b.title,
+	b.description,
+	b.image_url,
+	b.release_year,
+	b.price,
+	b.total_page,
+	b.thickness,
+	b.category_id,
+	b.created_at,
+	b.created_by,
+	b.modified_at,
+	b.modified_by
+FROM
+	books b
+JOIN
+	categories c ON b.category_id = c.id
+WHERE
+	b.category_id = $1
+ORDER BY
+	b.created_at ASC
+`
+	rows, err := db.DBconn.Query(sqlGetAllBooksFromCategory, id)
+	if err != nil {
+		log.Println(err)
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Failed retrieving books from category",
+		})
+		return
+	}
+
+	var bookList []books.Book
+
+	defer rows.Close()
+	for rows.Next() {
+		var b books.Book
+		err := rows.Scan(
+			&b.ID,
+			&b.Title,
+			&b.Description,
+			&b.ImageURL,
+			&b.ReleaseYear,
+			&b.Price,
+			&b.TotalPage,
+			&b.Thickness,
+			&b.CategoryID,
+			&b.CreatedAt,
+			&b.CreatedBy,
+			&b.ModifiedAt,
+			&b.ModifiedBy,
+		)
+		if err != nil {
+			log.Println(err)
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"message": "Failed retrieving books from category",
+			})
+			return
+		}
+		bookList = append(bookList, b)
+	}
+
+	if len(bookList) < 1 {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"message": "This category has no book yet",
+			"data":    bookList,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "Success retrieved books from category",
+		"data":    bookList,
 	})
 }
