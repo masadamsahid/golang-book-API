@@ -1,6 +1,6 @@
  # Book Management API
 
-A RESTful API for managing a collection of books, built with Go, Gin, and GORM. This project provides endpoints for user authentication, and for creating, reading, updating, and deleting books and categories.
+A RESTful API for managing a collection of books, built with Go, Gin, and PostgreSQL. This project provides endpoints for user authentication, and for creating, reading, updating, and deleting books and categories.
 
 ## Tech Stack
 
@@ -9,12 +9,13 @@ A RESTful API for managing a collection of books, built with Go, Gin, and GORM. 
 - **PostgreSQL**: Database
 - **Go Playground Validator**: For request validation
 - **Bcrypt**: For password hashing
+- **Golang-JWT**: For JWT authentication
 
 ## Getting Started
 
 ### Prerequisites
 
-- Go (version 1.18 or higher)
+- Go (version 1.24.5 or higher)
 - PostgreSQL
 - `migrate` CLI tool
 
@@ -22,8 +23,8 @@ A RESTful API for managing a collection of books, built with Go, Gin, and GORM. 
 
 1.  **Clone the repository:**
     ```sh
-    git clone <your-repo-url>
-    cd book-management-API
+    git clone https://github.com/masadamsahid/golang-book-API.git
+    cd golang-book-API
     ```
 
 2.  **Create a `.env` file** in the root directory by copying the `.env.example` file and fill in your database credentials:
