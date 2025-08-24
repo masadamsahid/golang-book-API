@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"os"
 
 	_ "github.com/lib/pq"
@@ -26,18 +27,17 @@ func ConnectPg() {
 
 	DBconn, err = sql.Open("postgres", psqlInfo)
 	if err != nil {
-		fmt.Println("Failed to establish connection to DB")
-		panic(err)
+		log.Println("Failed to establish connection to DB", err)
 	}
 
 	err = DBconn.Ping()
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
-	fmt.Println("Success connecting to DB")
+	log.Println("Success connecting to DB")
 }
 
 func StopDBConn() {
 	DBconn.Close()
-	fmt.Println("Success closing connection to DB")
+	log.Println("Success closing connection to DB")
 }

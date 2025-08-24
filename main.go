@@ -45,7 +45,7 @@ func main() {
 	// OpenAPI
 	openAPIYAMLDocs, err := os.ReadFile("./docs/swagger.yaml")
 	if err != nil {
-		panic(err)
+		log.Println("Error loading OpenAPI .yaml file:", err)
 	}
 
 	router.GET("/openapi", func(ctx *gin.Context) {
@@ -61,10 +61,11 @@ func main() {
 			scalargo.WithTitle("📚 Golang Book Management API"),
 		),
 	)
+	if err != nil {
+		log.Println("Error Scalar-Go:", err)
+	}
+
 	router.GET("/docs", func(ctx *gin.Context) {
-		if err != nil {
-			panic(err)
-		}
 		ctx.Data(http.StatusOK, "text/html", []byte(html))
 	})
 
