@@ -19,6 +19,7 @@ func main() {
 
 	// load .env to os lib
 	if err := godotenv.Load(); err != nil {
+		log.Println(err)
 		log.Fatal("Error loading .env file")
 	}
 
