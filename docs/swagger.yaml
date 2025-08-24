@@ -3,7 +3,7 @@ info:
   title: "📚 Golang Book Management API"
   version: 1.0.0
 servers:
-  - url: "http://{host}/api/"
+  - url: "{host}/api/"
     variables:
       host:
         enum:
