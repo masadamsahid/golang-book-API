@@ -1,0 +1,435 @@
+openapi: 3.0.8
+info:
+  title: "📚 Golang Book Management API"
+  version: 1.0.0
+servers:
+  - url: "http://{host}/api/"
+    variables:
+      host:
+        enum:
+          - localhost:8080
+          - localhost:9000
+          - mysite.com
+        default: localhost:9000
+tags:
+  - name: HealthCheck
+    description: APIs for checking the health of the service
+  - name: Users
+    description: User related APIs
+  - name: Categories
+    description: Category management APIs
+  - name: Books
+    description: Book management APIs
+paths:
+  /hello-world:
+    get:
+      summary: Returns a simple hello world message
+      tags:
+        - HealthCheck
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Hello, world! Server is running
+  /users/register:
+    post:
+      summary: Register a new user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/User"
+              properties:
+                confirm_password:
+                  type: string
+      responses:
+        201:
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    example: Success registering user
+                  data:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  /users/login:
+    post:
+      summary: Login a user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/User"
+      responses:
+        200:
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                properties:
+                  message:
+                    example: Success logging in
+                  data:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  /categories:
+    post:
+      summary: Create a new category
+      tags:
+        - Categories
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Category"
+      responses:
+        201:
+          description: Category created successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Category"
+    get:
+      summary: Get all categories
+      tags:
+        - Categories
+      responses:
+        200:
+          description: List of categories
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Category"
+  /categories/{id}:
+    get:
+      summary: Get category by ID
+      tags:
+        - Categories
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Category found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Category"
+    put:
+      summary: Update category by ID
+      tags:
+        - Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Category"
+      responses:
+        200:
+          description: Category updated successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Category"
+    delete:
+      summary: Delete category by ID
+      tags:
+        - Categories
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Category deleted successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+  /categories/{id}/books:
+    get:
+      summary: Get books by category ID
+      tags:
+        - Categories
+        - Books
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: List of books in the category
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Book"
+  /books:
+    post:
+      summary: Create a new book
+      tags:
+        - Books
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Book"
+      responses:
+        201:
+          description: Book created successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Book"
+    get:
+      summary: Get all books
+      tags:
+        - Books
+      parameters:
+        - in: query
+          name: title
+          schema:
+            type: string
+          description: Filter by book title
+        - in: query
+          name: category_id
+          schema:
+            type: integer
+          description: Filter by category ID
+      responses:
+        200:
+          description: List of books
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Book"
+  /books/{id}:
+    get:
+      summary: Get book by ID
+      tags:
+        - Books
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Book found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Book"
+    put:
+      summary: Update book by ID
+      tags:
+        - Books
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Book"
+      responses:
+        200:
+          description: Book updated successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Book"
+    delete:
+      summary: Delete book by ID
+      tags:
+        - Books
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Book deleted successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BaseResponse"
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      allOf:
+        - $ref: "#/components/schemas/BaseProps"
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          writeOnly: true
+    Category:
+      allOf:
+        - $ref: "#/components/schemas/BaseProps"
+      properties:
+        name:
+          type: string
+    Book:
+      allOf:
+        - $ref: "#/components/schemas/BaseProps"
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        image_url:
+          type: string
+          format: "url"
+        relese_year:
+          type: integer
+          minimum: 1980
+          maximum: 2024
+        price:
+          type: integer
+        total_page:
+          type: integer
+        thickness:
+          type: string
+          readOnly: true
+        category_id:
+          type: integer
+    BaseProps:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        created_by:
+          type: string
+          nullable: true
+          readOnly: true
+        modified_at:
+          type: string
+          nullable: true
+          format: date-time
+          readOnly: true
+        modified_by:
+          type: string
+          nullable: true
+          format: date-time
+          readOnly: true
+    BaseResponse:
+      type: object
+      properties:
+        message:
+          type: string

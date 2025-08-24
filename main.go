@@ -11,6 +11,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+
+	scalargo "github.com/bdpiprava/scalar-go"
 )
 
 func main() {
@@ -27,7 +29,7 @@ func main() {
 	// Gin
 	router := gin.Default()
 
-	router.GET("/", func(ctx *gin.Context) {
+	router.GET("/api/hello-world", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
 			"message": "Hello, world! Server is running",
 		})
@@ -38,6 +40,32 @@ func main() {
 	users.UserRoutes(api.Group("/users"))
 	categories.CategoriesRoutes(api.Group("/categories"))
 	books.BooksRoutes(api.Group("/books"))
+
+	// OpenAPI
+	openAPIYAMLDocs, err := os.ReadFile("./docs/swagger.yaml")
+	if err != nil {
+		panic(err)
+	}
+
+	router.GET("/openapi", func(ctx *gin.Context) {
+		ctx.Data(http.StatusOK, "text/plain", openAPIYAMLDocs)
+	})
+
+	// Scalar
+
+	html, err := scalargo.NewV2(
+		scalargo.WithSpecURL("/openapi"),
+		scalargo.WithTheme(scalargo.ThemeBluePlanet),
+		scalargo.WithMetaDataOpts(
+			scalargo.WithTitle("📚 Golang Book Management API"),
+		),
+	)
+	router.GET("/docs", func(ctx *gin.Context) {
+		if err != nil {
+			panic(err)
+		}
+		ctx.Data(http.StatusOK, "text/html", []byte(html))
+	})
 
 	PORT := os.Getenv("APP_PORT")
 	if PORT == "" {

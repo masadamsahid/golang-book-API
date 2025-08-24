@@ -4,12 +4,13 @@ A RESTful API for managing a collection of books, built with Go, Gin, and Postgr
 
 ## Tech Stack
 
-- **Go**: Backend Language
-- **Gin**: HTTP web framework
-- **PostgreSQL**: Database
-- **Go Playground Validator**: For request validation
-- **Bcrypt**: For password hashing
-- **Golang-JWT**: For JWT authentication
+- [**Go**](https://go.dev): Backend Language
+- [**Gin**](https://gin-gonic.com): HTTP web framework
+- [**PostgreSQL**](https://www.postgresql.org): Database
+- [**Go Playground Validator**](https://github.com/go-playground/validator): For request validation
+- [**Bcrypt**](golang.org/x/crypto/bcrypt): For password hashing
+- [**Golang-JWT**](https://pkg.go.dev/github.com/golang-jwt/jwt/v5): For JWT authentication
+- [**Scalar-Go**](https://github.com/bdpiprava/scalar-go): For OpenAPI-compliant documentation
 
 ## Getting Started
 
@@ -51,7 +52,11 @@ A RESTful API for managing a collection of books, built with Go, Gin, and Postgr
 
 ---
 
-## API Endpoint Documentation
+## API Endpoint Documentations
+
+ The API documentations are available  at `/openapi` (OpenAPI specs) and `/docs` (Scalar UI) routes. You can see in the [Postman Collection](docs/api.postman_collection.json) as well.
+ 
+ Or, you may be prefer to read them here below:
 
 ### Users
 
