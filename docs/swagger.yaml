@@ -144,6 +144,7 @@ paths:
           schema:
             type: integer
             format: int64
+            default: 10
       responses:
         200:
           description: Category found
@@ -168,6 +169,7 @@ paths:
           schema:
             type: integer
             format: int64
+            default: 10
       requestBody:
         required: true
         content:
@@ -198,6 +200,7 @@ paths:
           schema:
             type: integer
             format: int64
+            default: 10
       responses:
         200:
           description: Category deleted successfully
@@ -219,6 +222,7 @@ paths:
           schema:
             type: integer
             format: int64
+            default: 10
       responses:
         200:
           description: List of books in the category
@@ -260,17 +264,6 @@ paths:
       summary: Get all books
       tags:
         - Books
-      parameters:
-        - in: query
-          name: title
-          schema:
-            type: string
-          description: Filter by book title
-        - in: query
-          name: category_id
-          schema:
-            type: integer
-          description: Filter by category ID
       responses:
         200:
           description: List of books
@@ -296,6 +289,7 @@ paths:
           schema:
             type: integer
             format: int64
+            default: 10
       responses:
         200:
           description: Book found
@@ -320,6 +314,7 @@ paths:
           schema:
             type: integer
             format: int64
+            default: 10
       requestBody:
         required: true
         content:
@@ -350,6 +345,7 @@ paths:
           schema:
             type: integer
             format: int64
+            default: 10
       responses:
         200:
           description: Book deleted successfully
@@ -371,39 +367,49 @@ components:
       properties:
         username:
           type: string
+          default: "user1"
         password:
           type: string
           writeOnly: true
+          default: "password1"
     Category:
       allOf:
         - $ref: "#/components/schemas/BaseProps"
       properties:
         name:
           type: string
+          default: "Your Category"
     Book:
       allOf:
         - $ref: "#/components/schemas/BaseProps"
       properties:
         title:
           type: string
+          default: "A New Book"
         description:
           type: string
+          default: "Book description"
         image_url:
           type: string
           format: "url"
-        relese_year:
+          default: "https://example.com/default.jpg"
+        release_year:
           type: integer
           minimum: 1980
           maximum: 2024
+          default: 2000
         price:
           type: integer
+          default: 100000
         total_page:
           type: integer
+          default: 250
         thickness:
           type: string
           readOnly: true
         category_id:
           type: integer
+          default: 1
     BaseProps:
       type: object
       properties:

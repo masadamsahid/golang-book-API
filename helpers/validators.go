@@ -22,6 +22,8 @@ func HandleValidationErrors(validationErrors validator.ValidationErrors) map[str
 			errs[fieldErr.Field()] = fieldErr.Field() + " should be less than " + fieldErr.Param()
 		case "gt":
 			errs[fieldErr.Field()] = fieldErr.Field() + " should be greater than " + fieldErr.Param()
+		case "url":
+			errs[fieldErr.Field()] = fieldErr.Field() + " must be a valid URL"
 		default:
 			errs[fieldErr.Field()] = "Validation failed for " + fieldErr.Field()
 		}
