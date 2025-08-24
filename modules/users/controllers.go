@@ -53,7 +53,7 @@ func HandleRegister(ctx *gin.Context) {
 	if err != nil {
 		log.Println(err)
 		if strings.Contains(err.Error(), "unique constraint") {
-			ctx.JSON(http.StatusBadRequest, gin.H{
+			ctx.JSON(http.StatusConflict, gin.H{
 				"message": "'username' already taken",
 			})
 			return
