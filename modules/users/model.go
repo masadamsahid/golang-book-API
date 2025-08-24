@@ -3,7 +3,7 @@ package users
 import "time"
 
 type User struct {
-	ID         int        `json:"id"`
+	ID         uint       `json:"id"`
 	Username   string     `json:"username"`
 	Password   string     `json:"password"`
 	CreatedAt  *time.Time `json:"created_at"`

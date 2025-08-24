@@ -9,8 +9,8 @@ type Book struct {
 	ImageURL    *string    `json:"image_url"`
 	ReleaseYear int        `json:"release_year"`
 	Price       *int       `json:"price"`
-	TotalPage   *int       `json:"total_page"`
-	Thickness   *string    `json:"thickness"`
+	TotalPage   uint       `json:"total_page"`
+	Thickness   string     `json:"thickness"`
 	CategoryID  uint       `json:"category_id"`
 	CreatedAt   time.Time  `json:"created_at"`
 	CreatedBy   string     `json:"created_by"`

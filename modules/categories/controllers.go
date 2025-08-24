@@ -64,7 +64,7 @@ func HandleCreateCategory(ctx *gin.Context) {
 	if err != nil {
 		log.Println(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"message": "Failed registering new user",
+			"message": "Failed creating category",
 		})
 		return
 	}
@@ -102,7 +102,7 @@ func HandleGetAllCategories(ctx *gin.Context) {
 		if err != nil {
 			log.Println(err)
 			ctx.JSON(http.StatusInternalServerError, gin.H{
-				"message": "Failed retrieving bioskops",
+				"message": "Failed retrieving categories",
 			})
 			return
 		}

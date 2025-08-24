@@ -31,9 +31,9 @@ func JwtAuthMiddleware() gin.HandlerFunc {
 
 		if claims, ok := authToken.Claims.(jwt.MapClaims); ok && authToken.Valid {
 			ctx.Set("user", helpers.AuthPayload{
-				ID:       int(claims["id"].(float64)),
+				ID:       uint(claims["id"].(float64)),
 				Username: claims["username"].(string),
-				Exp:      int(claims["exp"].(float64)),
+				Exp:      uint(claims["exp"].(float64)),
 			})
 		}
 

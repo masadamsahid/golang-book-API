@@ -15,13 +15,13 @@ var jwtSecret = "*&(HD!)&EO"
 var jwtSecretArrOfByte = []byte(jwtSecret)
 
 type AuthPayload struct {
-	ID       int    `json:"id"`
+	ID       uint   `json:"id"`
 	Username string `json:"username"`
-	Exp      int    `json:"exp"`
+	Exp      uint   `json:"exp"`
 }
 
 type AuthTokenClaims struct {
-	ID       int
+	ID       uint
 	Username string
 }
 
