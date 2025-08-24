@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -12,6 +13,12 @@ import (
 
 var jwtSecret = "*&(HD!)&EO"
 var jwtSecretArrOfByte = []byte(jwtSecret)
+
+type AuthPayload struct {
+	ID       int    `json:"id"`
+	Username string `json:"username"`
+	Exp      int    `json:"exp"`
+}
 
 type AuthTokenClaims struct {
 	ID       int
@@ -33,4 +40,18 @@ func CreateAuthToken(claims AuthTokenClaims) (string, error) {
 	}
 
 	return authToken, nil
+}
+
+func VerifyAuthToken(strAuthToken string) (*jwt.Token, error) {
+	authToken, err := jwt.Parse(strAuthToken, func(t *jwt.Token) (any, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
+		}
+
+		return jwtSecretArrOfByte, nil
+	})
+
+	// log.Println(err)
+
+	return authToken, err
 }
